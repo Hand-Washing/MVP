@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "realtime-cam-demo"
+version = "0.1.0"
+description = "Good cleaning hand mirror MVP application build"
+authors = ["1eejuhwany <LeeJuHwan@github.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.100.1"
+uvicorn = "^0.23.1"
+sqlalchemy = "^2.0.19"
+opencv-python = "^4.8.0.74"
+pillow = "^10.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
