@@ -1,14 +1,15 @@
-from typing import List
 import cv2
 from cv2 import CascadeClassifier
+from typing import List
 from common import constant
-from common.constant import GrayScale
+
+global_var_web_cam = None  # webcam on, off endpoint make each memory address
 
 
 def detect_objects(cascade, frame) -> List[List]:
     """얼굴 인식 좌표"""
 
-    gray_frame: GrayScale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray_frame: constant.GrayScale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     objects: CascadeClassifier(List[List]) = cascade.detectMultiScale(
         gray_frame, scaleFactor=1.1, minNeighbors=5
     )
@@ -37,29 +38,31 @@ def draw_bounding_boxes(objects: List[List], frame: List[List]):
         )
 
 
-def get_stream_video(cascade: CascadeClassifier(List[List])):
+def get_stream_video(cascade):
     """실시간 영상 송출"""
 
     success: bool
     frame: List[int, int, int, int]
 
+    global global_var_web_cam
+    global_var_web_cam = cv2.VideoCapture(0)
+
     while True:
-        success, frame = constant.WEBCAM.read()
+        success, frame = global_var_web_cam.read()
 
         if not success:
             break
 
-        else:
-            frame = cv2.flip(frame, 1)  # Horizontal
+        frame = cv2.flip(frame, 1)  # Horizontal
 
-            objects = detect_objects(cascade, frame)
-            draw_bounding_boxes(objects, frame)
+        objects = detect_objects(cascade, frame)
+        draw_bounding_boxes(objects, frame)
 
-            ret, buffer = cv2.imencode(".jpg", frame)
-            frame = buffer.tobytes()
-            yield (
-                b"--frame\r\n"
-                b"Content-Type: image/jpeg\r\n\r\n" + bytearray(frame) + b"\r\n"
-            )
+        ret, buffer = cv2.imencode(".jpg", frame)
+        frame = buffer.tobytes()
+        yield (
+            b"--frame\r\n"
+            b"Content-Type: image/jpeg\r\n\r\n" + bytearray(frame) + b"\r\n"
+        )
 
-    constant.WEBCAM.release()  # memory free
+    global_var_web_cam.release()
