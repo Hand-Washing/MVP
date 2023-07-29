@@ -4,6 +4,7 @@ from typing import List
 from common import constant
 
 global_var_web_cam = None  # webcam on, off endpoint make each memory address
+USE_NNPACK = 0
 
 
 def detect_objects(cascade, frame) -> List[List]:
