@@ -1,6 +1,8 @@
 from fastapi import APIRouter
+
 # from util.opencv_webcam import get_stream_video
 from util.test import get_stream_video
+from util.error_handling import CustomException
 from fastapi.responses import StreamingResponse
 from common import constant
 
@@ -8,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/video")
-def realtime_webcam():
+async def realtime_webcam():
     return StreamingResponse(
         get_stream_video(),
         media_type=constant.MEDIA_TYPE,
@@ -16,9 +18,11 @@ def realtime_webcam():
 
 
 @router.get("/close")
-def realtime_cam_exit():
+async def realtime_cam_exit():
     from util.opencv_webcam import global_var_web_cam
 
-    global_var_web_cam.release()
-    print(f"{id(global_var_web_cam)}: 메모리 회수")
-    return {"message": "Webcam streaming stopped."}
+    if global_var_web_cam:
+        global_var_web_cam.release()
+        return {"message": "Webcam streaming stopped."}
+
+    raise CustomException(name="realtime_cam_exit")
