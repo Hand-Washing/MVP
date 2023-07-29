@@ -7,7 +7,7 @@ class CustomException(Exception):
         self.name = name
 
 
-async def unvicorn_exception_handelr(request: Request, exc: CustomException):
+async def video_exception_handelr(request: Request, exc: CustomException):
     return JSONResponse(
         status_code=500,
         content={"message": f"Callabe: {exc.name} >> 웹 캠이 현재 켜져 있지 않습니다."},

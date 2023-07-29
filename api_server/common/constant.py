@@ -1,3 +1,4 @@
+# pakages
 import cv2
 from typing import TypeVar, Final
 
@@ -6,14 +7,10 @@ GrayScale = TypeVar("gray_frame")
 WebCam = TypeVar("WEBCAM")
 Image = TypeVar("IMAGE")
 
-# object-detection
-FACE_CASCADE: Final[cv2.CascadeClassifier] = cv2.CascadeClassifier(
-    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-)
 
 # images
 # VIDEO = cv2.VideoCapture("dummy_video.mp4")
-IMAGE: Final[Image] = cv2.imread("/Users/juhwan.lee/Downloads/QHD 검은색 배경화면.jpg")
+# IMAGE: Final[Image] = cv2.imread("/Users/juhwan.lee/Downloads/QHD 검은색 배경화면.jpg")
 
 # stream-type
 MEDIA_TYPE: Final[str] = "multipart/x-mixed-replace; boundary=frame"
