@@ -153,4 +153,4 @@ dmypy.json
 cython_debug/
 
 # model weights file
-api_server/*.pt
+api_server/yolov5s.pt
