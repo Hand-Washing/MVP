@@ -33,7 +33,7 @@ def draw_bounding_boxes(objects: List[List], frame: List[List]):
         class_num = class_mapping[class_name]
 
         if class_num == 0:
-            label: str = f"{class_name} {conf:.2f}"  # persone: 0.85%
+            label: str = f"{class_name} {conf:.2f}"  # person: 0.85%
             frame = cv2.rectangle(
                 frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2
             )
