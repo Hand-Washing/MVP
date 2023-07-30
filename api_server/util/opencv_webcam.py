@@ -1,5 +1,6 @@
 # pakages
 import cv2
+import numpy as np
 import time
 from typing import List
 
@@ -13,10 +14,10 @@ global_var_web_cam = None
 detected_time = None
 
 
-def yolo(model, frame) -> List[List]:
+def yolo(frame) -> List[List]:
     """Detected objects output box"""
 
-    results = model(frame)
+    results = YOLO_MODEL(frame)
     return results.pandas().xyxy[0]
 
 
@@ -69,6 +70,8 @@ def draw_bounding_boxes(objects: List[List], frame: List[List]):
     elif not _detected:
         detected_time = None
 
+    return _detected
+
 
 def get_stream_video():
     """stream video"""
@@ -86,11 +89,16 @@ def get_stream_video():
             break
 
         frame = cv2.flip(frame, 1)  # Horizontal flip
+        objects = yolo(frame)
+        person_detected = draw_bounding_boxes(objects, frame)
 
-        objects = yolo(YOLO_MODEL, frame)
-        draw_bounding_boxes(objects, frame)
+        if person_detected:
+            ret, buffer = cv2.imencode(".jpg", frame)
 
-        ret, buffer = cv2.imencode(".jpg", frame)
+        else:
+            frame = np.zeros_like(frame)
+            ret, buffer = cv2.imencode(".jpg", frame)
+
         frame = buffer.tobytes()
         yield (
             b"--frame\r\n"
